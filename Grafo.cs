@@ -52,7 +52,8 @@ namespace Trabalho_Grafos
             }
         }
 
-        private Vertice ObterVerticePorRotulo(int rotulo)
+        //Mudei isso aqui pra público pra poder usar no adjacência de vértices
+        public Vertice ObterVerticePorRotulo(int rotulo)
         {
             foreach (Vertice vertice in conjuntoDeVertices)
             {
@@ -148,6 +149,21 @@ namespace Trabalho_Grafos
                 }
             }
             return listaAdjacência;
+        }
+
+        public bool VerificarAdjacenciaVertice(Vertice x, Vertice y)
+        {
+            bool adjacente = false;
+            List<Aresta> arestasVertice=x.RetornaListaDeArestas();
+            foreach (Aresta aresta in arestasVertice)
+            {
+                if(aresta.RetornaVerticeDestino() == y)
+                {
+                    adjacente=true;
+                    return adjacente;
+                }
+            }
+            return adjacente;
         }
 
         public override int GetHashCode()

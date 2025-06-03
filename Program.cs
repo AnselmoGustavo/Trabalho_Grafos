@@ -145,6 +145,7 @@ namespace Trabalho_Grafos
             Console.WriteLine("1 - Cadastrar Grafo (Manual)");
             Console.WriteLine("2 - Cadastrar Grafo (Arquivo)");
             Console.WriteLine("3 - Visualizar Grafo");
+            Console.WriteLine("7 - Verficar Adjacência de um vértice em relação a outro");
             Console.WriteLine("0 - Finalizar");
 
             try
@@ -211,6 +212,25 @@ namespace Trabalho_Grafos
                             ExibirListaAdjacencia(listaAdjacenciaGerada, grafoDesejado, quantidadeVertices);
                         }
                         break;
+                    case 7:
+                        Console.Clear();
+                        ExibeIdGrafosCriados();
+                        Console.WriteLine("Informe o ID do grafo desejado: \n");
+                        int idGrafo=int.Parse(Console.ReadLine());
+                        Console.WriteLine("Informe o vértice desejado: \n");
+                        int idVertice1= int.Parse(Console.ReadLine());
+                        Console.WriteLine("Informe o vértice que quer verificar a adjacência: \n");
+                        int idVertrice2=int.Parse(Console.ReadLine());
+                        Grafo grafoDesejado2=RetornaGrafoDesejado(idGrafo);
+                        if(grafoDesejado2.VerificarAdjacenciaVertice(grafoDesejado2.ObterVerticePorRotulo(idVertice1), grafoDesejado2.ObterVerticePorRotulo(idVertrice2))){
+                            Console.WriteLine($"Os vértices são adjacentes!");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Os vértices não são adjacentes.");
+                        }
+                            break;
+
 
                 }
                 Pausa();
