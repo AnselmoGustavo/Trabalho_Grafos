@@ -19,7 +19,7 @@ namespace Trabalho_Grafos
             id = ++_ultimoID;
             this.quantidadeDeVertices = quantidadeDeVertices;
             this.quantidadeDeArestas = quantidadeDeArestas; 
-            conjuntoDeVertices = new List<Vertice>(quantidadeDeVertices);   
+            conjuntoDeVertices = new List<Vertice>(quantidadeDeVertices);
         }
 
         public void PreencheRotuloVertices(int rotulo)
