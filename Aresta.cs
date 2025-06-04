@@ -42,5 +42,14 @@ namespace Trabalho_Grafos
         {
             return id;
         }
+        public void AlterarPeso(double x)
+        {
+            this.pesoDaAresta = x;
+        }
+
+        public double RetornarPeso()
+        {
+            return this.pesoDaAresta;
+        }
     }
 }
