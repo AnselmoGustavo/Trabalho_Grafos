@@ -10,7 +10,7 @@ namespace Trabalho_Grafos
     internal class Program
     {
         static Dictionary<int, Grafo> todosOsGrafos = new Dictionary<int, Grafo>();
-
+        f
         public static void PreencherVertices(Grafo grafo, int quantidadeVertices)
         {
             Console.Clear();

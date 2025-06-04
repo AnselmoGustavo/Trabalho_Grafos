@@ -13,7 +13,7 @@ namespace Trabalho_Grafos
         private List<string> linhasDoArquivo;
         private string leituraLinha;
 
-
+        
         public Arquivo(string caminho)
         {
             this.caminhoArquivo = caminho;

@@ -69,7 +69,7 @@ namespace Trabalho_Grafos
         {
             return quantidadeDeArestas / (quantidadeDeVertices * (quantidadeDeVertices - 1));
         }
-
+        
         public int[,] GerarMatrizAdjacencia()
         {
             int[,] matrizDeAdjacencia = new int[conjuntoDeVertices.Count, conjuntoDeVertices.Count];
