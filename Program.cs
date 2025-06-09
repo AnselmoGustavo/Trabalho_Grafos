@@ -238,10 +238,12 @@ namespace Trabalho_Grafos
 
             Console.WriteLine("4 - Visualizar arestas adjacentes a uma aresta específica"); // mudei aqui
             Console.WriteLine("5 - Visualizar vértices adjacentes a um vértice específico"); // mudei aqui
-
-            Console.WriteLine("7 - Verficar Adjacência de um vértice em relação a outro");
-            Console.WriteLine("8 - Substituir o peso de uma aresta por outro valor");
-            Console.WriteLine("9 - Trocar de lugar dois vértices de um grafo");
+            Console.WriteLine("6 - Visualizar todas as arestas incidentes a um vértice v");
+            Console.WriteLine("7 - Visualizar todos os vértices incidentes a uma aresta específica");
+            Console.WriteLine("8 - Visualizar o grau de um vértice específico");
+            Console.WriteLine("9 - Verficar Adjacência de um vértice em relação a outro");
+            Console.WriteLine("10 - Substituir o peso de uma aresta por outro valor");
+            Console.WriteLine("11 - Trocar de lugar dois vértices de um grafo");
             Console.WriteLine("0 - Finalizar");
 
             try
@@ -373,8 +375,15 @@ namespace Trabalho_Grafos
                         int rotulo = int.Parse(Console.ReadLine());
                         ExibeVerticesAdjacentes(grafoDesejado, rotulo);
                         break;
-
+                    //Tópicos da Ana
+                    case 6:
+                        break;
                     case 7:
+                        break;
+                    case 8:
+                        break;
+                    //Tópicos da Ana
+                    case 9:
                         Console.Clear();
                         ExibeIdGrafosCriados();
                         Console.WriteLine("Informe o ID do grafo desejado: \n");
@@ -392,7 +401,7 @@ namespace Trabalho_Grafos
                             Console.WriteLine("Os vértices não são adjacentes.");
                         }
                             break;
-                    case 8:
+                    case 10:
                         Console.Clear();
                         ExibeIdGrafosCriados();
                         Console.WriteLine("Informe o ID do grafo desejado: \n");
@@ -413,7 +422,7 @@ namespace Trabalho_Grafos
                             }
                         }
                         break;
-                    case 9:
+                    case 11:
                         Console.Clear();
                         ExibeIdGrafosCriados();
                         Console.WriteLine("Informe o ID do grafo desejado: \n");
