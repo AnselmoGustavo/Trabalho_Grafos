@@ -46,7 +46,6 @@ namespace Trabalho_Grafos
         {
             this.pesoDaAresta = x;
         }
-
         public double RetornarPeso()
         {
             return this.pesoDaAresta;

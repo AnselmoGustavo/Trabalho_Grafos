@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -232,8 +234,14 @@ namespace Trabalho_Grafos
             Console.WriteLine("1 - Cadastrar Grafo (Manual)");
             Console.WriteLine("2 - Cadastrar Grafo (Arquivo)");
             Console.WriteLine("3 - Visualizar Grafo");
+
             Console.WriteLine("4 - Visualizar arestas adjacentes a uma aresta específica"); // mudei aqui
             Console.WriteLine("5 - Visualizar vértices adjacentes a um vértice específico"); // mudei aqui
+
+            Console.WriteLine("7 - Verficar Adjacência de um vértice em relação a outro");
+            Console.WriteLine("8 - Alterar peso de uma aresta");
+            Console.WriteLine("9 - Trocar vértices de lugar");
+
             Console.WriteLine("0 - Finalizar");
 
             try
@@ -298,6 +306,7 @@ namespace Trabalho_Grafos
 
                         break;
                     case 2:
+
                         try
                         {
                             Arquivo arquivoGrafo = new Arquivo("C:\\Users\\conta\\Downloads\\arquivoGrafo.txt");
@@ -318,6 +327,9 @@ namespace Trabalho_Grafos
                             Console.WriteLine($"Erro ao criar o grafo: {ex.Message}");
                         }
                         break;
+
+                            break;
+
                     case 3:
                         ExibeIdGrafosCriados();
                         Console.WriteLine("Informe o ID do grafo:");
@@ -338,6 +350,7 @@ namespace Trabalho_Grafos
                             ExibirListaAdjacencia(listaAdjacenciaGerada, grafoDesejado, quantidadeVerticesGrafo);
                         }
                         break;
+
                     case 4:
                         ExibeIdGrafosCriados();
                         Console.WriteLine("Informe o ID do grafo desejado: ");
@@ -358,6 +371,46 @@ namespace Trabalho_Grafos
                         Console.WriteLine("Informe qual o vértice que gostaria de ver seus vértices adjacentes: ");
                         int rotulo = int.Parse(Console.ReadLine());
                         ExibeVerticesAdjacentes(grafoDesejado, rotulo);
+
+                    case 7:
+                        Console.Clear();
+                        ExibeIdGrafosCriados();
+                        Console.WriteLine("Informe o ID do grafo desejado: \n");
+                        int idGrafo=int.Parse(Console.ReadLine());
+                        Console.WriteLine("Informe o vértice desejado: \n");
+                        int idVertice1= int.Parse(Console.ReadLine());
+                        Console.WriteLine("Informe o vértice que quer verificar a adjacência: \n");
+                        int idVertrice2=int.Parse(Console.ReadLine());
+                        Grafo grafoDesejado2=RetornaGrafoDesejado(idGrafo);
+                        if(grafoDesejado2.VerificarAdjacenciaVertice(grafoDesejado2.ObterVerticePorRotulo(idVertice1), grafoDesejado2.ObterVerticePorRotulo(idVertrice2))){
+                            Console.WriteLine($"Os vértices são adjacentes!");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Os vértices não são adjacentes.");
+                        }
+                            break;
+                    case 8:
+                        Console.Clear();
+                        ExibeIdGrafosCriados();
+                        Console.WriteLine("Informe o ID do grafo desejado: \n");
+                        int idGrafo2 = int.Parse(Console.ReadLine());
+                        Console.WriteLine("Informe o id da aresta que deseja alterar: \n");
+                        string idAresta=Console.ReadLine();
+                        Console.WriteLine("Informe o novo peso da aresta: \n");
+                        double peso = double.Parse(Console.ReadLine());
+                        Grafo grafoDesejado3=RetornaGrafoDesejado(idGrafo2);
+                        List<Aresta> todasAsArestas = grafoDesejado3.RetornaTodasAsArestasDoGrafo();
+                        foreach(Aresta a in todasAsArestas)
+                        {
+                            if (a.RetornaID().Equals(idAresta))
+                            {
+                                Console.Write($"Peso da aresta {a.RetornaID()} foi alterado de: {a.RetornarPeso()}");
+                                a.AlterarPeso(peso);
+                                Console.Write($", para: {a.RetornarPeso()}.");
+                            }
+                        }
+
                         break;
 
                 }
