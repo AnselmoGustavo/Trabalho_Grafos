@@ -160,6 +160,5 @@ namespace Trabalho_Grafos
             return conjuntoDeVertices;
         }
         
-
     }
 }

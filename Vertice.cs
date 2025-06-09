@@ -16,7 +16,6 @@ namespace Trabalho_Grafos
             this.rotuloDoVertice = rotulo;
             listaDeArestas = new List<Aresta>();
         }
-
         public int RetornaRotuloDoVertice()
         {
             return this.rotuloDoVertice;    

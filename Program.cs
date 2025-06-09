@@ -12,8 +12,7 @@ namespace Trabalho_Grafos
         static Dictionary<int, Grafo> todosOsGrafos = new Dictionary<int, Grafo>();  
         public static void PreencherVertices(Grafo grafo, int quantidadeVertices)
         {
-            Console.Clear();
-            
+            Console.Clear();          
 
             for (int i = 0; i < quantidadeVertices; i++) 
             {

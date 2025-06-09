@@ -15,7 +15,6 @@ namespace Trabalho_Grafos
         private double pesoDaAresta;
         private Vertice origem;
         private Vertice destino;
-
         public Aresta(Vertice origem, Vertice destino, double valorPeso) 
         {
             this.pesoDaAresta = valorPeso;
