@@ -50,5 +50,13 @@ namespace Trabalho_Grafos
         {
             return this.pesoDaAresta;
         }
+        public void SetOrigem(Vertice novaOrigem)
+        {
+            this.origem = novaOrigem;
+        }
+        public void SetDestino(Vertice novoDestino)
+        {
+            this.destino = novoDestino;
+        }
     }
 }

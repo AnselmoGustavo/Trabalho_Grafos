@@ -29,5 +29,9 @@ namespace Trabalho_Grafos
         {
             return listaDeArestas;
         }
+        public void LimpaArestas()
+        {
+            listaDeArestas.Clear();
+        }
     }
 }

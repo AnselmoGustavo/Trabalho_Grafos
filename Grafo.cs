@@ -11,15 +11,17 @@ namespace Trabalho_Grafos
         private static int _ultimoID = 0;
         private int id;
         private List<Vertice> conjuntoDeVertices;
+        private List<Aresta> conjuntoDeArestas;
         private int quantidadeDeVertices;
         private int quantidadeDeArestas;
 
-        public Grafo(int quantidadeDeVertices, int quantidadeDeArestas) 
+        public Grafo(int quantidadeDeVertices, int quantidadeDeArestas)
         {
             id = ++_ultimoID;
             this.quantidadeDeVertices = quantidadeDeVertices;
             this.quantidadeDeArestas = quantidadeDeArestas; 
             conjuntoDeVertices = new List<Vertice>(quantidadeDeVertices);
+            conjuntoDeArestas = new List<Aresta>(quantidadeDeArestas);
         }
 
         public void PreencheRotuloVertices(int rotulo)
@@ -39,14 +41,15 @@ namespace Trabalho_Grafos
         {
             Vertice verticeDeOrigem = ObterVerticePorRotulo(origem);
             Vertice verticeDeDestino = ObterVerticePorRotulo(destino);
-            Aresta novaAresta = null;
+            //tirei a criação da aresta de dentro do if pra poder adicionar ao conjunto de arestas do grafo, no if agora ele só adiciona ao vértice de origem
+            Aresta novaAresta = new Aresta(verticeDeOrigem, verticeDeDestino, peso);
+            conjuntoDeArestas.Add(novaAresta);
 
             if (verticeDeOrigem != null && verticeDeDestino != null)
             {
-                 novaAresta = new Aresta(verticeDeOrigem, verticeDeDestino, peso);
-                 verticeDeOrigem.InsereNaListaDeArestas(novaAresta);
+                verticeDeOrigem.InsereNaListaDeArestas(novaAresta);
             }
-            else 
+            else
             {
                 Console.WriteLine("Vértice de origem e/ou de destino inválidos");
             }
@@ -70,7 +73,7 @@ namespace Trabalho_Grafos
         {
             return quantidadeDeArestas / (quantidadeDeVertices * (quantidadeDeVertices - 1));
         }
-
+        
         public int[,] GerarMatrizAdjacencia()
         {
             int[,] matrizDeAdjacencia = new int[conjuntoDeVertices.Count, conjuntoDeVertices.Count];
@@ -79,7 +82,7 @@ namespace Trabalho_Grafos
             {
                 Vertice verticeOrigem = conjuntoDeVertices[i];
 
-                foreach (Aresta aresta in verticeOrigem.RetornaListaDeArestas()) 
+                foreach (Aresta aresta in verticeOrigem.RetornaListaDeArestas())
                 {
                     int indiceVerticeDestino = conjuntoDeVertices.IndexOf(aresta.RetornaVerticeDestino());
 
@@ -87,21 +90,22 @@ namespace Trabalho_Grafos
                     {
                         matrizDeAdjacencia[i, indiceVerticeDestino] = 1;
                     }
-                } 
-                
+                }
+
             }
 
-            
-            return matrizDeAdjacencia;  
+
+            return matrizDeAdjacencia;
         }
 
-        public List<Aresta> RetornaTodasAsArestasDoGrafo() 
+        //Vou alterar esse método para retornar todas as arestas do grafo, só que só pegando a lista de arestas do grafo, sem ter que passar pelos vértices
+        /*public List<Aresta> RetornaTodasAsArestasDoGrafo()
         {
             List<Aresta> arestaTotal = new List<Aresta>();
 
             foreach (Vertice vertice in conjuntoDeVertices)
             {
-                foreach (Aresta aresta in vertice.RetornaListaDeArestas()) 
+                foreach (Aresta aresta in vertice.RetornaListaDeArestas())
                 {
                     if (!arestaTotal.Contains(aresta))
                     {
@@ -110,16 +114,22 @@ namespace Trabalho_Grafos
                 }
             }
             return arestaTotal;
+        }*/
+
+        public List<Aresta> RetornaTodasAsArestasDoGrafo()
+        {
+            return conjuntoDeArestas;
         }
 
-        public int[,] GerarMatrizIncidência() 
+        public int[,] GerarMatrizIncidência()
         {
-            List<Aresta> arestaTotal = RetornaTodasAsArestasDoGrafo();  
+            //alterar isso aqui porque não precisamos mais do método pra retornar todas as arestas do grafo, já que agora temos o conjunto de arestas
+            //List<Aresta> arestaTotal = RetornaTodasAsArestasDoGrafo();
             int[,] matrizDeIncidencia = new int[conjuntoDeVertices.Count, quantidadeDeArestas];
 
-            for (int i = 0; i < arestaTotal.Count; i++)
+            for (int i = 0; i < conjuntoDeArestas.Count; i++)
             {
-                Aresta aresta = arestaTotal[i];
+                Aresta aresta = conjuntoDeArestas[i];
                 int indiceVerticeOrigem = conjuntoDeVertices.IndexOf(aresta.RetornaVerticeOrigem());
                 int indiceVerticeDestino = conjuntoDeVertices.IndexOf(aresta.RetornaVerticeDestino());
 
@@ -142,13 +152,30 @@ namespace Trabalho_Grafos
             {
                 Vertice vertice = conjuntoDeVertices[i];
 
-                foreach (Aresta aresta in vertice.RetornaListaDeArestas()) 
+                foreach (Aresta aresta in vertice.RetornaListaDeArestas())
                 {
-                    
+
                     listaAdjacência[i].Add(aresta.RetornaVerticeDestino());
                 }
             }
             return listaAdjacência;
+        }
+
+
+        public int RetornaRotuloVerticePorIdAresta(string idAresta)
+        {
+            int rotuloArestaDesejada = -10000;
+            foreach (Vertice vertice in conjuntoDeVertices)
+            {
+                foreach (Aresta aresta in vertice.RetornaListaDeArestas())
+                {
+                    if (idAresta == aresta.RetornaID())
+                    {
+                        rotuloArestaDesejada = vertice.RetornaRotuloDoVertice();
+                    }
+                }
+            }
+            return rotuloArestaDesejada;
         }
 
         public bool VerificarAdjacenciaVertice(Vertice x, Vertice y)
@@ -164,6 +191,7 @@ namespace Trabalho_Grafos
                 }
             }
             return adjacente;
+
         }
 
         public override int GetHashCode()
@@ -175,7 +203,54 @@ namespace Trabalho_Grafos
         {
             return conjuntoDeVertices;
         }
-        
+        public void TrocarVertices(int rotulo1, int rotulo2)
+        {
+            Vertice v1 = ObterVerticePorRotulo(rotulo1);
+            Vertice v2 = ObterVerticePorRotulo(rotulo2);
+            
+            if(v1== null || v2 == null)
+            {
+                Console.WriteLine("Um ou ambos os vértices não existem no grafo.");
+                return;
+            }
+            //Vou percorrer todas as arestas e trocar as origens das arestas relacionadas a esses vértices
+            for(int i=0; i<conjuntoDeArestas.Count; i++)
+            {
+                Aresta a = conjuntoDeArestas[i];
+                //Aqui eu troco as origens de cada aresta relacionada aos dois vértices, se não for relacionada, só n faz nada
+                if(a.RetornaVerticeOrigem() == v1)
+                {
+                    a.SetOrigem(v2);
+                }
+                else if (a.RetornaVerticeOrigem() == v2)
+                {
+                    a.SetOrigem(v1);
+                }
+                //Aqui eu troco os destinos de cada aresta relacionada aos dois vértices, se não for relacionada, só n faz nada
+                if (a.RetornaVerticeDestino() == v1)
+                {
+                    a.SetDestino(v2);
+                }
+                else if (a.RetornaVerticeDestino() == v2)
+                {
+                    a.SetDestino(v1);
+                }
+
+                for(int j=0; j< conjuntoDeVertices.Count; j++)
+                {
+                    Vertice v = conjuntoDeVertices[j];
+                    //Depois de já ter trocado as origens e destinos de todas as arestas, vou limpar a aresta de cada vértice do grafo pra poder inserir as novas sem dar problema
+                    v.LimpaArestas(); 
+                }
+                //Agora que limpei todas as arestas, bora repovoar essa lista com as novas e as que não foram modificadas
+                for(int k = 0; k < conjuntoDeArestas.Count; k++)
+                {
+                    Aresta a2 = conjuntoDeArestas[k];
+                    
+                    a2.RetornaVerticeOrigem().InsereNaListaDeArestas(a2);
+                }
+            }
+        }
 
     }
 }
