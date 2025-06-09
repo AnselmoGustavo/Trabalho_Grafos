@@ -377,10 +377,55 @@ namespace Trabalho_Grafos
                         break;
                     //Tópicos da Ana
                     case 6:
+                        Console.Clear();
+                        ExibeIdGrafosCriados();
+                        Console.WriteLine("Informe o ID do grafo desejado: \n");
+                        idGrafo = int.Parse(Console.ReadLine());
+                        grafoDesejado = RetornaGrafoDesejado(idGrafo);
+                        Console.WriteLine("Informe o vértice desejado: \n");
+                        idVertice1 = int.Parse(Console.ReadLine());
+                        List<Aresta> arestasIncidentes= new List<Aresta>();
+                        foreach (Aresta a in grafoDesejado.RetornaTodasAsArestasDoGrafo())
+                        {
+                            if(a.RetornaVerticeOrigem().RetornaRotuloDoVertice() == idVertice1 || a.RetornaVerticeDestino().RetornaRotuloDoVertice() == idVertice1)
+                            {
+                                arestasIncidentes.Add(a);
+                            }
+                        }
+                        if (arestasIncidentes.Count > 0)
+                        {
+                            Console.WriteLine($"Arestas incidentes ao vértice {idVertice1}:");
+                            foreach (Aresta a in arestasIncidentes)
+                            {
+                                Console.WriteLine(a.RetornaID());
+                                Console.WriteLine($"Origem: {a.RetornaVerticeOrigem()}\nDestino: {a.RetornaVerticeDestino()}\nPeso: {a.RetornarPeso()}");
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine($"Não há arestas incidentes ao vértice {idVertice1}.");
+                        }
                         break;
                     case 7:
+                        Console.Clear();
+                        ExibeIdGrafosCriados();
+                        Console.WriteLine("Informe o ID do grafo desejado: \n");
+                        idGrafo = int.Parse(Console.ReadLine());
+                        grafoDesejado = RetornaGrafoDesejado(idGrafo);
+                        Console.WriteLine("Informe o ID da aresta que deseja ver os vértices incidentes: ");
+                        idAresta = "e" + Console.ReadLine();
+                        Aresta arestaDesejada = grafoDesejado.ObterArestaPorId(idAresta);
+                        Console.WriteLine($"Vértices incidentes à aresta {idAresta}:\nOrigem: {arestaDesejada.RetornaVerticeOrigem()}\nDestino: {arestaDesejada.RetornaVerticeDestino()}");
                         break;
                     case 8:
+                        Console.Clear();
+                        ExibeIdGrafosCriados();
+                        Console.WriteLine("Informe o ID do grafo desejado: \n");
+                        idGrafo = int.Parse(Console.ReadLine());
+                        grafoDesejado = RetornaGrafoDesejado(idGrafo);
+                        Console.WriteLine("Informe o vértice desejado: \n");
+                        idVertice1 = int.Parse(Console.ReadLine());
+                        Console.WriteLine($"O grau do vértice {idVertice1} é: {grafoDesejado.ObterVerticePorRotulo(idVertice1).RetornaListaDeArestas().Count()}");
                         break;
                     //Tópicos da Ana
                     case 9:

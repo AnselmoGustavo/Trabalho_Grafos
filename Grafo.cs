@@ -69,6 +69,18 @@ namespace Trabalho_Grafos
             return null;
         }
 
+        public Aresta ObterArestaPorId(string id)
+        {
+            foreach (Aresta aresta in conjuntoDeArestas)
+            {
+                if (aresta.RetornaID() == id)
+                {
+                    return aresta;
+                }
+            }
+            return null;
+        }
+
         public double CalculaDensidadeDoGrafo()
         {
             return quantidadeDeArestas / (quantidadeDeVertices * (quantidadeDeVertices - 1));
