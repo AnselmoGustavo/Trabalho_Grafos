@@ -14,11 +14,15 @@ namespace Trabalho_Grafos
         private int quantidadeDeVertices;
         private int quantidadeDeArestas;
 
-        public Grafo(int quantidadeDeVertices, int quantidadeDeArestas) 
+        public Grafo(int quantidadeDeVertices, int quantidadeDeArestas)
         {
             id = ++_ultimoID;
             this.quantidadeDeVertices = quantidadeDeVertices;
+
+            this.quantidadeDeArestas = quantidadeDeArestas;
+
             this.quantidadeDeArestas = quantidadeDeArestas; 
+          
             conjuntoDeVertices = new List<Vertice>(quantidadeDeVertices);
         }
 
@@ -43,10 +47,10 @@ namespace Trabalho_Grafos
 
             if (verticeDeOrigem != null && verticeDeDestino != null)
             {
-                 novaAresta = new Aresta(verticeDeOrigem, verticeDeDestino, peso);
-                 verticeDeOrigem.InsereNaListaDeArestas(novaAresta);
+                novaAresta = new Aresta(verticeDeOrigem, verticeDeDestino, peso);
+                verticeDeOrigem.InsereNaListaDeArestas(novaAresta);
             }
-            else 
+            else
             {
                 Console.WriteLine("Vértice de origem e/ou de destino inválidos");
             }
@@ -70,7 +74,7 @@ namespace Trabalho_Grafos
         {
             return quantidadeDeArestas / (quantidadeDeVertices * (quantidadeDeVertices - 1));
         }
-
+        
         public int[,] GerarMatrizAdjacencia()
         {
             int[,] matrizDeAdjacencia = new int[conjuntoDeVertices.Count, conjuntoDeVertices.Count];
@@ -79,7 +83,7 @@ namespace Trabalho_Grafos
             {
                 Vertice verticeOrigem = conjuntoDeVertices[i];
 
-                foreach (Aresta aresta in verticeOrigem.RetornaListaDeArestas()) 
+                foreach (Aresta aresta in verticeOrigem.RetornaListaDeArestas())
                 {
                     int indiceVerticeDestino = conjuntoDeVertices.IndexOf(aresta.RetornaVerticeDestino());
 
@@ -87,21 +91,21 @@ namespace Trabalho_Grafos
                     {
                         matrizDeAdjacencia[i, indiceVerticeDestino] = 1;
                     }
-                } 
-                
+                }
+
             }
 
-            
-            return matrizDeAdjacencia;  
+
+            return matrizDeAdjacencia;
         }
 
-        public List<Aresta> RetornaTodasAsArestasDoGrafo() 
+        public List<Aresta> RetornaTodasAsArestasDoGrafo()
         {
             List<Aresta> arestaTotal = new List<Aresta>();
 
             foreach (Vertice vertice in conjuntoDeVertices)
             {
-                foreach (Aresta aresta in vertice.RetornaListaDeArestas()) 
+                foreach (Aresta aresta in vertice.RetornaListaDeArestas())
                 {
                     if (!arestaTotal.Contains(aresta))
                     {
@@ -112,9 +116,9 @@ namespace Trabalho_Grafos
             return arestaTotal;
         }
 
-        public int[,] GerarMatrizIncidência() 
+        public int[,] GerarMatrizIncidência()
         {
-            List<Aresta> arestaTotal = RetornaTodasAsArestasDoGrafo();  
+            List<Aresta> arestaTotal = RetornaTodasAsArestasDoGrafo();
             int[,] matrizDeIncidencia = new int[conjuntoDeVertices.Count, quantidadeDeArestas];
 
             for (int i = 0; i < arestaTotal.Count; i++)
@@ -142,14 +146,30 @@ namespace Trabalho_Grafos
             {
                 Vertice vertice = conjuntoDeVertices[i];
 
-                foreach (Aresta aresta in vertice.RetornaListaDeArestas()) 
+                foreach (Aresta aresta in vertice.RetornaListaDeArestas())
                 {
-                    
+
                     listaAdjacência[i].Add(aresta.RetornaVerticeDestino());
                 }
             }
             return listaAdjacência;
         }
+
+
+        public int RetornaRotuloVerticePorIdAresta(string idAresta)
+        {
+            int rotuloArestaDesejada = -10000;
+            foreach (Vertice vertice in conjuntoDeVertices)
+            {
+                foreach (Aresta aresta in vertice.RetornaListaDeArestas())
+                {
+                    if (idAresta == aresta.RetornaID())
+                    {
+                        rotuloArestaDesejada = vertice.RetornaRotuloDoVertice();
+                    }
+                }
+            }
+            return rotuloArestaDesejada;
 
         public bool VerificarAdjacenciaVertice(Vertice x, Vertice y)
         {
@@ -164,6 +184,7 @@ namespace Trabalho_Grafos
                 }
             }
             return adjacente;
+
         }
 
         public override int GetHashCode()
@@ -175,7 +196,7 @@ namespace Trabalho_Grafos
         {
             return conjuntoDeVertices;
         }
-        
+
 
     }
 }
