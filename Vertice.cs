@@ -29,5 +29,13 @@ namespace Trabalho_Grafos
         {
             return listaDeArestas;
         }
+        public void LimpaArestas()
+        {
+            listaDeArestas.Clear();
+        }
+        public override string ToString()
+        {
+            return this.rotuloDoVertice.ToString();
+        }
     }
 }
