@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Trabalho_Grafos
 {
-    class Algoritmos
+    class Buscas
     {
     }
 }

@@ -43,7 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Algoritmos.cs" />
+    <Compile Include="Buscas.cs" />
     <Compile Include="Aresta.cs" />
     <Compile Include="Arquivo.cs" />
     <Compile Include="Grafo.cs" />
