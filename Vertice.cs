@@ -82,6 +82,22 @@ namespace Trabalho_Grafos
             }
             return null;
         }
+        public void SetIndice(int indice)
+        {
+            this.Indice = indice;
+        }
+        public int RetornaIndice()
+        {
+            return this.Indice;
+        }
+        public void SetNivel(int nivel)
+        {
+            this.Nivel = nivel;
+        }
+        public int RetornaNivel()
+        {
+            return this.Nivel;
+        }
         public override string ToString()
         {
             return this.rotuloDoVertice.ToString();
