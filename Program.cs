@@ -212,6 +212,37 @@ namespace Trabalho_Grafos
             }
         }
 
+        public static void ExibirMatrizBusca(string[,] buscaFinalizada)
+        {
+            // Imprime cabeçalho (linha 0, colunas 1 em diante)
+            Console.Write("     ");
+            for (int j = 1; j < buscaFinalizada.GetLength(1); j++)
+            {
+                Console.Write($"{buscaFinalizada[0, j],5}");
+            }
+            Console.WriteLine();
+
+            // Imprime corpo da tabela: linhas 1 (TD), 2 (TT), 3 (Pai) ou linhas 1 (L), 2 (Nível), 3 (Pai)
+            for (int i = 1; i <= 3; i++)
+            {
+                // TD, TT ou Pai
+                Console.Write($"{buscaFinalizada[i, 0],5}");
+
+                for (int j = 1; j < buscaFinalizada.GetLength(1); j++)
+                {
+                    string itemTabela = buscaFinalizada[i, j];
+
+                    if (string.IsNullOrEmpty(itemTabela))
+                        Console.Write($"{'∅',5}");
+                    else
+                        Console.Write($"{itemTabela,5}");
+                }
+
+                Console.WriteLine();
+            }
+
+        }
+
         public static void Cabecalho()
         {
             Console.WriteLine("===============================================");
@@ -244,6 +275,8 @@ namespace Trabalho_Grafos
             Console.WriteLine("9 - Verficar Adjacência de um vértice em relação a outro");
             Console.WriteLine("10 - Substituir o peso de uma aresta por outro valor");
             Console.WriteLine("11 - Trocar de lugar dois vértices de um grafo");
+            Console.WriteLine("12 - Fazer uma busca em profundidade em um grafo");
+            Console.WriteLine("13 - Fazer uma busca em largura em um grafo");
             Console.WriteLine("0 - Finalizar");
 
             try
@@ -275,10 +308,12 @@ namespace Trabalho_Grafos
             double densidade = -1;
             Grafo novoGrafo = null;
             Grafo grafoDesejado = null;
+            Buscas algoritmoBusca;
             int opcao = -1;
             int idGrafo = 0;
             int idVertice1, idVertice2 = 0;
             string idAresta = null;
+            string[,] buscaFinalizada;
             do
             {
                 opcao = ExibirMenu();
@@ -480,6 +515,32 @@ namespace Trabalho_Grafos
                         Grafo copiaGrafoDesejado = grafoDesejado;
                         grafoDesejado.TrocarVertices(idVertice1, idVertice2 );
                         Console.WriteLine($"Vértices {idVertice1} e {idVertice2} trocados com sucesso!");
+                        break;
+                    case 12:
+                        Console.Clear();
+                        ExibeIdGrafosCriados();
+                        Console.WriteLine("Informe o ID do grafo desejado: \n");
+                        idGrafo = int.Parse(Console.ReadLine());
+                        grafoDesejado = RetornaGrafoDesejado(idGrafo);
+                        Console.WriteLine("Informe o vértice de origem para a busca: \n");
+                        idVertice1 = int.Parse(Console.ReadLine());
+                        algoritmoBusca = new Buscas(grafoDesejado);
+                        buscaFinalizada = algoritmoBusca.BuscaProfundidade(idVertice1);
+                        Console.WriteLine("Aqui está a tabela de busca em profundidade:\n");
+                        ExibirMatrizBusca(buscaFinalizada);
+                        break;
+                    case 13:
+                        Console.Clear();
+                        ExibeIdGrafosCriados();
+                        Console.WriteLine("Informe o ID do grafo desejado: \n");
+                        idGrafo = int.Parse(Console.ReadLine());
+                        grafoDesejado = RetornaGrafoDesejado(idGrafo);
+                        Console.WriteLine("Informe o vértice de origem para a busca: \n");
+                        idVertice1 = int.Parse(Console.ReadLine());
+                        algoritmoBusca = new Buscas(grafoDesejado);
+                        buscaFinalizada = algoritmoBusca.IniciarBuscaLargura(idVertice1);
+                        Console.WriteLine("Aqui está a tabela de busca em largura:\n");
+                        ExibirMatrizBusca(buscaFinalizada);
                         break;
                 }
                 Pausa();
