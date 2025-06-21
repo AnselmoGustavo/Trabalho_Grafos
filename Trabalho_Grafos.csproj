@@ -46,6 +46,7 @@
     <Compile Include="Buscas.cs" />
     <Compile Include="Aresta.cs" />
     <Compile Include="Arquivo.cs" />
+    <Compile Include="CaminhoMinimo.cs" />
     <Compile Include="Grafo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

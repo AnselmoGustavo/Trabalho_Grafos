@@ -243,6 +243,28 @@ namespace Trabalho_Grafos
 
         }
 
+        public static void ExibeTabelaDistanciasFloydWarshall(double[,] tabelaFloydWarshall)
+        {
+            Console.Clear();
+            Console.WriteLine("======= Método de Floyd-Warshall ======");
+            Console.WriteLine();
+            for (int i = 0; i < tabelaFloydWarshall.GetLength(0); i++)
+            {
+                for (int j = 0; j < tabelaFloydWarshall.GetLength(1); j++)
+                {
+                    if (i == 0 && j == 0)
+                    {
+                        Console.Write("      ");
+                    }
+                    else
+                    {
+                        Console.Write($"{tabelaFloydWarshall[i, j],6}");
+                    }
+                }
+                Console.WriteLine();
+            }
+        }
+
         public static void Cabecalho()
         {
             Console.WriteLine("===============================================");
@@ -266,7 +288,6 @@ namespace Trabalho_Grafos
             Console.WriteLine("1 - Cadastrar Grafo (Manual)");
             Console.WriteLine("2 - Cadastrar Grafo (Arquivo)");
             Console.WriteLine("3 - Visualizar Grafo");
-
             Console.WriteLine("4 - Visualizar arestas adjacentes a uma aresta específica"); // mudei aqui
             Console.WriteLine("5 - Visualizar vértices adjacentes a um vértice específico"); // mudei aqui
             Console.WriteLine("6 - Visualizar todas as arestas incidentes a um vértice v");
@@ -277,6 +298,7 @@ namespace Trabalho_Grafos
             Console.WriteLine("11 - Trocar de lugar dois vértices de um grafo");
             Console.WriteLine("12 - Fazer uma busca em profundidade em um grafo");
             Console.WriteLine("13 - Fazer uma busca em largura em um grafo");
+            Console.WriteLine("14 - Encontrar caminho mínimo - Algoritmo Floyd Warshall");
             Console.WriteLine("0 - Finalizar");
 
             try
@@ -349,7 +371,7 @@ namespace Trabalho_Grafos
                     case 2:
                         try
                         {
-                            Arquivo arquivoGrafo = new Arquivo("C:\\Users\\Gustavo\\Downloads\\arquivoGrafo.txt");
+                            Arquivo arquivoGrafo = new Arquivo("C:\\Users\\conta\\Downloads\\arquivoGrafo.txt");
                             Grafo grafoArquivo = new Grafo(arquivoGrafo.RetornaQuantidadeVertices(), arquivoGrafo.RetornaQuantidadeVertices());
 
                             HashSet<int> conjuntoVertices = arquivoGrafo.RetornaVertices();
@@ -541,6 +563,16 @@ namespace Trabalho_Grafos
                         buscaFinalizada = algoritmoBusca.IniciarBuscaLargura(idVertice1);
                         Console.WriteLine("Aqui está a tabela de busca em largura:\n");
                         ExibirMatrizBusca(buscaFinalizada);
+                        break;
+                    case 14:
+                        Console.Clear();
+                        ExibeIdGrafosCriados();
+                        Console.WriteLine("Informe o ID do grafo desejado: \n");
+                        idGrafo = int.Parse(Console.ReadLine());
+                        grafoDesejado = RetornaGrafoDesejado(idGrafo);
+                        CaminhoMinimo caminhoPorFloydWarshall = new CaminhoMinimo(grafoDesejado);
+                        double[,] tabelaFloydWarshall = caminhoPorFloydWarshall.RetornaTabelaFloydWarshall();
+                        ExibeTabelaDistanciasFloydWarshall(tabelaFloydWarshall);    
                         break;
                 }
                 Pausa();
