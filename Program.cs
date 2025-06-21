@@ -12,8 +12,8 @@ namespace Trabalho_Grafos
     internal class Program
     {
         static Dictionary<int, Grafo> todosOsGrafos = new Dictionary<int, Grafo>();
-      
-       
+
+
         public static void PreencherVertices(Grafo grafo, int quantidadeVertices)
         {
             Console.Clear();
@@ -72,7 +72,7 @@ namespace Trabalho_Grafos
             Console.WriteLine("==================================================================");
         }
 
-    
+
         public static void ExibeArestasAdjacentes(Grafo grafo, int rotuloVertice, string idAresta)
         {
             foreach (Vertice vertice in grafo.RetornaListaVertices())
@@ -135,7 +135,7 @@ namespace Trabalho_Grafos
 
         }
 
-       
+
         public static void PreencheArestasArquivo(Grafo grafo, int quantidadeArestas, List<int> conjuntoDeArestas, List<double> conjuntoPesos)
         {
             int indiceOrigem = 0;
@@ -277,6 +277,7 @@ namespace Trabalho_Grafos
             Console.WriteLine("11 - Trocar de lugar dois vértices de um grafo");
             Console.WriteLine("12 - Fazer uma busca em profundidade em um grafo");
             Console.WriteLine("13 - Fazer uma busca em largura em um grafo");
+            Console.WriteLine("14 - Visualizar o camiho mínimo entre dois vértices");
             Console.WriteLine("0 - Finalizar");
 
             try
@@ -419,10 +420,10 @@ namespace Trabalho_Grafos
                         grafoDesejado = RetornaGrafoDesejado(idGrafo);
                         Console.WriteLine("Informe o vértice desejado: \n");
                         idVertice1 = int.Parse(Console.ReadLine());
-                        List<Aresta> arestasIncidentes= new List<Aresta>();
+                        List<Aresta> arestasIncidentes = new List<Aresta>();
                         foreach (Aresta a in grafoDesejado.RetornaTodasAsArestasDoGrafo())
                         {
-                            if(a.RetornaVerticeOrigem().RetornaRotuloDoVertice() == idVertice1 || a.RetornaVerticeDestino().RetornaRotuloDoVertice() == idVertice1)
+                            if (a.RetornaVerticeOrigem().RetornaRotuloDoVertice() == idVertice1 || a.RetornaVerticeDestino().RetornaRotuloDoVertice() == idVertice1)
                             {
                                 arestasIncidentes.Add(a);
                             }
@@ -467,20 +468,21 @@ namespace Trabalho_Grafos
                         Console.Clear();
                         ExibeIdGrafosCriados();
                         Console.WriteLine("Informe o ID do grafo desejado: \n");
-                        idGrafo=int.Parse(Console.ReadLine());
+                        idGrafo = int.Parse(Console.ReadLine());
                         Console.WriteLine("Informe o vértice desejado: \n");
-                        idVertice1= int.Parse(Console.ReadLine());
+                        idVertice1 = int.Parse(Console.ReadLine());
                         Console.WriteLine("Informe o vértice que quer verificar a adjacência: \n");
-                        idVertice2=int.Parse(Console.ReadLine());
-                        grafoDesejado=RetornaGrafoDesejado(idGrafo);
-                        if(grafoDesejado.VerificarAdjacenciaVertice(grafoDesejado.ObterVerticePorRotulo(idVertice1), grafoDesejado.ObterVerticePorRotulo(idVertice2))){
+                        idVertice2 = int.Parse(Console.ReadLine());
+                        grafoDesejado = RetornaGrafoDesejado(idGrafo);
+                        if (grafoDesejado.VerificarAdjacenciaVertice(grafoDesejado.ObterVerticePorRotulo(idVertice1), grafoDesejado.ObterVerticePorRotulo(idVertice2)))
+                        {
                             Console.WriteLine($"Os vértices são adjacentes!");
                         }
                         else
                         {
                             Console.WriteLine("Os vértices não são adjacentes.");
                         }
-                            break;
+                        break;
                     case 10:
                         Console.Clear();
                         ExibeIdGrafosCriados();
@@ -491,7 +493,7 @@ namespace Trabalho_Grafos
                         idAresta = "e" + int.Parse(Console.ReadLine());
                         foreach (Aresta aresta in grafoDesejado.RetornaTodasAsArestasDoGrafo())
                         {
-                            if(aresta.RetornaID() == idAresta)
+                            if (aresta.RetornaID() == idAresta)
                             {
                                 Console.WriteLine($"Aresta: {aresta.RetornaID()}");
                                 Console.WriteLine($"Peso atual: {aresta.RetornarPeso()}");
@@ -513,7 +515,7 @@ namespace Trabalho_Grafos
                         Console.WriteLine("Informe o id do vértice deseja trocar de lugar: \n");
                         idVertice2 = int.Parse(Console.ReadLine());
                         Grafo copiaGrafoDesejado = grafoDesejado;
-                        grafoDesejado.TrocarVertices(idVertice1, idVertice2 );
+                        grafoDesejado.TrocarVertices(idVertice1, idVertice2);
                         Console.WriteLine($"Vértices {idVertice1} e {idVertice2} trocados com sucesso!");
                         break;
                     case 12:
@@ -542,6 +544,20 @@ namespace Trabalho_Grafos
                         Console.WriteLine("Aqui está a tabela de busca em largura:\n");
                         ExibirMatrizBusca(buscaFinalizada);
                         break;
+                    case 14:
+                        Console.Clear();
+                        ExibeIdGrafosCriados();
+                        Console.WriteLine("Informe o ID do grafo desejado: \n");
+                        idGrafo = int.Parse(Console.ReadLine());
+                        grafoDesejado = RetornaGrafoDesejado(idGrafo);
+                        Console.WriteLine("Informe o vértice de origem: \n");
+                        idVertice1 = int.Parse(Console.ReadLine());
+                        Console.WriteLine("Informe o vértice de destino: \n");
+                        idVertice2 = int.Parse(Console.ReadLine());
+
+                        grafoDesejado.DijkstraCaminhoMinimo(idVertice1, idVertice2);
+                        break;
+
                 }
                 Pausa();
             } while (opcao != 0);

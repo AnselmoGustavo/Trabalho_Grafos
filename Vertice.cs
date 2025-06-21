@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Trabalho_Grafos
 {
-    public class Vertice
+    public class Vertice : IPriorizable
     {
         private int rotuloDoVertice;
         private List<Aresta> listaDeArestas;
@@ -15,8 +15,9 @@ namespace Trabalho_Grafos
         private Vertice Pai;
         private int Indice;
         private int Nivel;
+        private int Distancia;
 
-        public Vertice(int rotulo) 
+        public Vertice(int rotulo)
         {
             this.rotuloDoVertice = rotulo;
             listaDeArestas = new List<Aresta>();
@@ -24,11 +25,11 @@ namespace Trabalho_Grafos
 
         public int RetornaRotuloDoVertice()
         {
-            return this.rotuloDoVertice;    
+            return this.rotuloDoVertice;
         }
         public void InsereNaListaDeArestas(Aresta aresta)
-        { 
-            listaDeArestas.Add(aresta); 
+        {
+            listaDeArestas.Add(aresta);
         }
         public List<Aresta> RetornaListaDeArestas()
         {
@@ -73,7 +74,7 @@ namespace Trabalho_Grafos
         }
         public Aresta RetornaArestaEspecifica(Vertice destino)
         {
-            foreach(Aresta aresta in listaDeArestas)
+            foreach (Aresta aresta in listaDeArestas)
             {
                 if (aresta.RetornaVerticeDestino() == destino)
                 {
@@ -98,9 +99,22 @@ namespace Trabalho_Grafos
         {
             return this.Nivel;
         }
+
+        public int GetDistancia()
+        {
+            return this.Distancia;
+        }
+
+        public void SetDistancia(int distancia)
+        {
+            this.Distancia = distancia;
+        }
+
+        double IPriorizable.Priority { get => GetDistancia(); }
         public override string ToString()
         {
             return this.rotuloDoVertice.ToString();
         }
+
     }
 }
