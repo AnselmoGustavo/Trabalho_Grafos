@@ -277,7 +277,7 @@ namespace Trabalho_Grafos
             Console.WriteLine("11 - Trocar de lugar dois vértices de um grafo");
             Console.WriteLine("12 - Fazer uma busca em profundidade em um grafo");
             Console.WriteLine("13 - Fazer uma busca em largura em um grafo");
-            Console.WriteLine("14 - Visualizar o camiho mínimo entre dois vértices");
+            Console.WriteLine("15 - Visualizar o camiho mínimo entre dois vértices");
             Console.WriteLine("0 - Finalizar");
 
             try
@@ -544,7 +544,7 @@ namespace Trabalho_Grafos
                         Console.WriteLine("Aqui está a tabela de busca em largura:\n");
                         ExibirMatrizBusca(buscaFinalizada);
                         break;
-                    case 14:
+                    case 15:
                         Console.Clear();
                         ExibeIdGrafosCriados();
                         Console.WriteLine("Informe o ID do grafo desejado: \n");
