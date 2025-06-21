@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,7 +20,7 @@ namespace Trabalho_Grafos
         {
             id = ++_ultimoID;
             this.quantidadeDeVertices = quantidadeDeVertices;
-            this.quantidadeDeArestas = quantidadeDeArestas; 
+            this.quantidadeDeArestas = quantidadeDeArestas;
             conjuntoDeVertices = new List<Vertice>(quantidadeDeVertices);
             conjuntoDeArestas = new List<Aresta>(quantidadeDeArestas);
         }
@@ -85,7 +86,7 @@ namespace Trabalho_Grafos
         {
             return quantidadeDeArestas / (quantidadeDeVertices * (quantidadeDeVertices - 1));
         }
-        
+
         public int[,] GerarMatrizAdjacencia()
         {
             int[,] matrizDeAdjacencia = new int[conjuntoDeVertices.Count, conjuntoDeVertices.Count];
@@ -166,13 +167,11 @@ namespace Trabalho_Grafos
 
                 foreach (Aresta aresta in vertice.RetornaListaDeArestas())
                 {
-
                     listaAdjacência[i].Add(aresta.RetornaVerticeDestino());
                 }
             }
             return listaAdjacência;
         }
-
 
         public int RetornaRotuloVerticePorIdAresta(string idAresta)
         {
@@ -193,12 +192,12 @@ namespace Trabalho_Grafos
         public bool VerificarAdjacenciaVertice(Vertice x, Vertice y)
         {
             bool adjacente = false;
-            List<Aresta> arestasVertice=x.RetornaListaDeArestas();
+            List<Aresta> arestasVertice = x.RetornaListaDeArestas();
             foreach (Aresta aresta in arestasVertice)
             {
-                if(aresta.RetornaVerticeDestino() == y)
+                if (aresta.RetornaVerticeDestino() == y)
                 {
-                    adjacente=true;
+                    adjacente = true;
                     return adjacente;
                 }
             }
@@ -219,18 +218,18 @@ namespace Trabalho_Grafos
         {
             Vertice v1 = ObterVerticePorRotulo(rotulo1);
             Vertice v2 = ObterVerticePorRotulo(rotulo2);
-            
-            if(v1== null || v2 == null)
+
+            if (v1 == null || v2 == null)
             {
                 Console.WriteLine("Um ou ambos os vértices não existem no grafo.");
                 return;
             }
             //Vou percorrer todas as arestas e trocar as origens das arestas relacionadas a esses vértices
-            for(int i=0; i<conjuntoDeArestas.Count; i++)
+            for (int i = 0; i < conjuntoDeArestas.Count; i++)
             {
                 Aresta a = conjuntoDeArestas[i];
                 //Aqui eu troco as origens de cada aresta relacionada aos dois vértices, se não for relacionada, só n faz nada
-                if(a.RetornaVerticeOrigem() == v1)
+                if (a.RetornaVerticeOrigem() == v1)
                 {
                     a.SetOrigem(v2);
                 }
@@ -248,21 +247,105 @@ namespace Trabalho_Grafos
                     a.SetDestino(v1);
                 }
 
-                for(int j=0; j< conjuntoDeVertices.Count; j++)
+                for (int j = 0; j < conjuntoDeVertices.Count; j++)
                 {
                     Vertice v = conjuntoDeVertices[j];
                     //Depois de já ter trocado as origens e destinos de todas as arestas, vou limpar a aresta de cada vértice do grafo pra poder inserir as novas sem dar problema
-                    v.LimpaArestas(); 
+                    v.LimpaArestas();
                 }
                 //Agora que limpei todas as arestas, bora repovoar essa lista com as novas e as que não foram modificadas
-                for(int k = 0; k < conjuntoDeArestas.Count; k++)
+                for (int k = 0; k < conjuntoDeArestas.Count; k++)
                 {
                     Aresta a2 = conjuntoDeArestas[k];
-                    
+
                     a2.RetornaVerticeOrigem().InsereNaListaDeArestas(a2);
                 }
             }
         }
 
+        public void DijkstraCaminhoMinimo(int rotuloOrigem, int rotuloDestino)
+        {
+            Vertice origem = ObterVerticePorRotulo(rotuloOrigem);
+            Vertice destino = ObterVerticePorRotulo(rotuloDestino);
+
+            if (origem == null || destino == null)
+            {
+                Console.WriteLine("Origem ou destino não existem.");
+                return;
+            }
+
+            // Dicionários auxiliares
+            Dictionary<Vertice, double> distancias = new Dictionary<Vertice, double>();
+            Dictionary<Vertice, Vertice> predecessores = new Dictionary<Vertice, Vertice>();
+
+            // Inicializa distâncias
+            foreach (Vertice v in conjuntoDeVertices)
+            {
+                distancias[v] = double.PositiveInfinity;
+                v.SetDistancia(int.MaxValue);
+            }
+
+            distancias[origem] = 0;
+            origem.SetDistancia(0);
+
+            FiladePrioridades<Vertice> fila = new FiladePrioridades<Vertice>();
+            fila.Enqueue(origem);
+
+            while (!fila.IsEmpty())
+            {
+                Vertice verticeAtual = fila.Dequeue();
+
+                foreach (Aresta aresta in verticeAtual.RetornaListaDeArestas())
+                {
+                    Vertice v = aresta.RetornaVerticeDestino();
+                    double peso = aresta.RetornarPeso();
+                    double novaDistancia = distancias[verticeAtual] + peso;
+
+                    if (novaDistancia < distancias[v])
+                    {
+                        distancias[v] = novaDistancia;
+                        v.SetDistancia((int)novaDistancia);
+                        predecessores[v] = verticeAtual;
+
+                        // Atualizar fila 
+                        FiladePrioridades<Vertice> filaTemp = new FiladePrioridades<Vertice>();
+                        while (!fila.IsEmpty())
+                        {
+                            Vertice temp = fila.Dequeue();
+                            if (temp != v)
+                                filaTemp.Enqueue(temp);
+                        }
+                        filaTemp.Enqueue(v);
+                        fila = filaTemp;
+                    }
+                }
+            }
+
+            if (!predecessores.ContainsKey(destino))
+            {
+                Console.WriteLine("Não existe caminho da origem até o destino.");
+                return;
+            }
+
+            Stack<Vertice> pilhaCaminho = new Stack<Vertice>();
+            Vertice atual = destino;
+            while (atual != null && atual != origem)
+            {
+                pilhaCaminho.Push(atual);
+                predecessores.TryGetValue(atual, out atual);
+            }
+            pilhaCaminho.Push(origem);
+
+            Console.WriteLine($"Caminho mínimo de {rotuloOrigem} até {rotuloDestino}:");
+            while (pilhaCaminho.Count > 0)
+            {
+                Vertice v = pilhaCaminho.Pop();
+                Console.Write(v.RetornaRotuloDoVertice());
+                if (pilhaCaminho.Count > 0)
+                    Console.Write(" -> ");
+            }
+
+            Console.WriteLine($"\nCusto total: {distancias[destino]}");
+        }
     }
 }
