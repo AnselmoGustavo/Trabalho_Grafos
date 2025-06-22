@@ -371,7 +371,7 @@ namespace Trabalho_Grafos
                     case 2:
                         try
                         {
-                            Arquivo arquivoGrafo = new Arquivo("C:\\Users\\conta\\Downloads\\arquivoGrafo.txt");
+                            Arquivo arquivoGrafo = new Arquivo("C:\\Users\\Gustavo\\Downloads\\arquivoGrafo.txt");
                             Grafo grafoArquivo = new Grafo(arquivoGrafo.RetornaQuantidadeVertices(), arquivoGrafo.RetornaQuantidadeVertices());
 
                             HashSet<int> conjuntoVertices = arquivoGrafo.RetornaVertices();
