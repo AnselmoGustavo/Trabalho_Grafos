@@ -70,7 +70,6 @@ namespace Trabalho_Grafos
                     v.RetornaArestaEspecifica(w).SetTipoAresta(1);
                     w.SetPai(v);
 
-                    //Adiciona as coisas na tabela antes de retornar a recursão
                     int indiceFilho = ObterIndiceDoVerticePeloRotulo(w.RetornaRotuloDoVertice())+1;
                     tabelaBuscaProfundidade[3, indiceFilho] = w.RetornaPai().ToString();
 
@@ -159,7 +158,6 @@ namespace Trabalho_Grafos
                         t++;
                         w.SetIndice(t);
 
-                        //Preencher Tabela
                         int indiceFilho = ObterIndiceDoVerticePeloRotulo(w.RetornaRotuloDoVertice()) + 1;
                         tabelaBuscaLargura[3,indiceFilho] = w.RetornaPai().ToString();
                         tabelaBuscaLargura[2,indiceFilho] = w.RetornaNivel().ToString();

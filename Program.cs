@@ -75,21 +75,39 @@ namespace Trabalho_Grafos
 
         public static void ExibeArestasAdjacentes(Grafo grafo, int rotuloVertice, string idAresta)
         {
-            foreach (Vertice vertice in grafo.RetornaListaVertices())
+            if(ArestaExiste(grafo, idAresta))
             {
-                if (vertice.RetornaRotuloDoVertice() == rotuloVertice)
+                foreach (Vertice vertice in grafo.RetornaListaVertices())
                 {
-                    foreach (Aresta aresta in vertice.RetornaListaDeArestas())
+                    if (vertice.RetornaRotuloDoVertice() == rotuloVertice)
                     {
-                        if (idAresta != aresta.RetornaID())
+                        foreach (Aresta aresta in vertice.RetornaListaDeArestas())
                         {
-                            Console.WriteLine($"Aresta: {aresta.RetornaID()}");
+                            if (idAresta != aresta.RetornaID())
+                            {
+                                Console.WriteLine($"Aresta: {aresta.RetornaID()}");
+                            }
                         }
                     }
                 }
             }
+            else
+            {
+                Console.WriteLine("Aresta não encontrada no grafo.");
+            }
         }
 
+        private static bool ArestaExiste(Grafo grafo, string a)
+        {
+            foreach (Aresta aresta in grafo.RetornaTodasAsArestasDoGrafo())
+            {
+                if (aresta.RetornaID() == a)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
         public static void ExibeVerticesDoGrafo(Grafo grafo)
         {
             Console.Clear();
@@ -104,16 +122,35 @@ namespace Trabalho_Grafos
 
         public static void ExibeVerticesAdjacentes(Grafo grafo, int rotuloVertice)
         {
-            foreach (Vertice vertice in grafo.RetornaListaVertices())
+            if (VerticeExiste(grafo, rotuloVertice))
             {
-                if (rotuloVertice == vertice.RetornaRotuloDoVertice())
+                foreach (Vertice vertice in grafo.RetornaListaVertices())
                 {
-                    foreach (Aresta aresta in vertice.RetornaListaDeArestas())
+                    if (rotuloVertice == vertice.RetornaRotuloDoVertice())
                     {
-                        Console.WriteLine($"Vértice: {aresta.RetornaVerticeDestino().RetornaRotuloDoVertice()}");
+                        foreach (Aresta aresta in vertice.RetornaListaDeArestas())
+                        {
+                            Console.WriteLine($"Vértice: {aresta.RetornaVerticeDestino().RetornaRotuloDoVertice()}");
+                        }
                     }
                 }
             }
+            else
+            {
+                Console.WriteLine("Vértice não encontrado no grafo.");
+            }
+        }
+
+        private static bool VerticeExiste(Grafo grafo, int rotulo)
+        {
+            foreach (Vertice vertice in grafo.RetornaListaVertices())
+            {
+                if (vertice.RetornaRotuloDoVertice() == rotulo)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
 
@@ -214,7 +251,7 @@ namespace Trabalho_Grafos
 
         public static void ExibirMatrizBusca(string[,] buscaFinalizada)
         {
-            // Imprime cabeçalho (linha 0, colunas 1 em diante)
+            
             Console.Write("     ");
             for (int j = 1; j < buscaFinalizada.GetLength(1); j++)
             {
@@ -222,10 +259,10 @@ namespace Trabalho_Grafos
             }
             Console.WriteLine();
 
-            // Imprime corpo da tabela: linhas 1 (TD), 2 (TT), 3 (Pai) ou linhas 1 (L), 2 (Nível), 3 (Pai)
+            
             for (int i = 1; i <= 3; i++)
             {
-                // TD, TT ou Pai
+                
                 Console.Write($"{buscaFinalizada[i, 0],5}");
 
                 for (int j = 1; j < buscaFinalizada.GetLength(1); j++)
@@ -288,8 +325,8 @@ namespace Trabalho_Grafos
             Console.WriteLine("1 - Cadastrar Grafo (Manual)");
             Console.WriteLine("2 - Cadastrar Grafo (Arquivo)");
             Console.WriteLine("3 - Visualizar Grafo");
-            Console.WriteLine("4 - Visualizar arestas adjacentes a uma aresta específica"); // mudei aqui
-            Console.WriteLine("5 - Visualizar vértices adjacentes a um vértice específico"); // mudei aqui
+            Console.WriteLine("4 - Visualizar arestas adjacentes a uma aresta específica"); 
+            Console.WriteLine("5 - Visualizar vértices adjacentes a um vértice específico"); 
             Console.WriteLine("6 - Visualizar todas as arestas incidentes a um vértice v");
             Console.WriteLine("7 - Visualizar todos os vértices incidentes a uma aresta específica");
             Console.WriteLine("8 - Visualizar o grau de um vértice específico");
@@ -392,202 +429,408 @@ namespace Trabalho_Grafos
                         break;
 
                     case 3:
-                        ExibeIdGrafosCriados();
-                        Console.WriteLine("Informe o ID do grafo:");
-                        idGrafo = int.Parse(Console.ReadLine());
-                        grafoDesejado = RetornaGrafoDesejado(idGrafo);
-                        densidade = grafoDesejado.CalculaDensidadeDoGrafo();
-
-                        int quantidadeVerticesGrafo = grafoDesejado.RetornaListaVertices().Count;
-
-                        if (densidade >= 0.6)
+                        try
                         {
-                            int[,] matrizAdjacenciaGerada = grafoDesejado.GerarMatrizAdjacencia();
-                            ExibirMatrizAdjacencia(matrizAdjacenciaGerada, grafoDesejado);
+                            ExibeIdGrafosCriados();
+                            Console.WriteLine("Informe o ID do grafo:");
+                            idGrafo = int.Parse(Console.ReadLine());
+                            grafoDesejado = RetornaGrafoDesejado(idGrafo);
+                            densidade = grafoDesejado.CalculaDensidadeDoGrafo();
+
+                            int quantidadeVerticesGrafo = grafoDesejado.RetornaListaVertices().Count;
+
+                            if (densidade >= 0.6)
+                            {
+                                int[,] matrizAdjacenciaGerada = grafoDesejado.GerarMatrizAdjacencia();
+                                ExibirMatrizAdjacencia(matrizAdjacenciaGerada, grafoDesejado);
+                            }
+                            else
+                            {
+                                List<Vertice>[] listaAdjacenciaGerada = grafoDesejado.GerarListaDeAdjacencia();
+                                ExibirListaAdjacencia(listaAdjacenciaGerada, grafoDesejado, quantidadeVerticesGrafo);
+                            }
                         }
-                        else
+                        catch (FormatException)
                         {
-                            List<Vertice>[] listaAdjacenciaGerada = grafoDesejado.GerarListaDeAdjacencia();
-                            ExibirListaAdjacencia(listaAdjacenciaGerada, grafoDesejado, quantidadeVerticesGrafo);
+                            Console.WriteLine("Formato inválido, digite somente os IDs disponíveis.");
+                        }
+                        catch (KeyNotFoundException)
+                        {
+                            Console.WriteLine("ID do grafo não encontrado. Tente novamente.");
+                        }
+                        catch (ArgumentException ex)
+                        {
+                            Console.WriteLine($"Erro de argumento: {ex.Message}");
                         }
                         break;
 
                     case 4:
-                        ExibeIdGrafosCriados();
-                        Console.WriteLine("Informe o ID do grafo desejado: ");
-                        idGrafo = int.Parse(Console.ReadLine());
-                        grafoDesejado = RetornaGrafoDesejado(idGrafo);
-                        ExibeIdArestasGrafo(grafoDesejado);
-                        Console.WriteLine("Informe o ID da aresta que deseja ver as arestas adjacentes: ");
-                        idAresta = Console.ReadLine().ToLower();
-                        int rotuloDoVerticePredecessor = grafoDesejado.RetornaRotuloVerticePorIdAresta(idAresta);
-                        ExibeArestasAdjacentes(grafoDesejado, rotuloDoVerticePredecessor, idAresta);
+                        try
+                        {
+                            ExibeIdGrafosCriados();
+                            Console.WriteLine("Informe o ID do grafo desejado: ");
+                            idGrafo = int.Parse(Console.ReadLine());
+                            grafoDesejado = RetornaGrafoDesejado(idGrafo);
+                            ExibeIdArestasGrafo(grafoDesejado);
+                            Console.WriteLine("Informe o ID da aresta que deseja ver as arestas adjacentes: ");
+                            idAresta = Console.ReadLine().ToLower();
+                            int rotuloDoVerticePredecessor = grafoDesejado.RetornaRotuloVerticePorIdAresta(idAresta);
+                            ExibeArestasAdjacentes(grafoDesejado, rotuloDoVerticePredecessor, idAresta);
+                        }
+                        catch (KeyNotFoundException)
+                        {
+                            Console.WriteLine("Id do grafo inexistente, digite somente os IDs disponíveis.");
+                        }
+                        catch (FormatException)
+                        {
+                            Console.WriteLine("Formato inválido, digite somente os IDs disponíveis.");
+                        }
                         break;
                     case 5:
-                        ExibeIdGrafosCriados();
-                        Console.WriteLine("Informe o ID do grafo desejado: ");
-                        idGrafo = int.Parse(Console.ReadLine());
-                        grafoDesejado = RetornaGrafoDesejado(idGrafo);
-                        ExibeVerticesDoGrafo(grafoDesejado);
-                        Console.WriteLine("Informe qual o vértice que gostaria de ver seus vértices adjacentes: ");
-                        int rotulo = int.Parse(Console.ReadLine());
-                        ExibeVerticesAdjacentes(grafoDesejado, rotulo);
+                        try
+                        {
+                            ExibeIdGrafosCriados();
+                            Console.WriteLine("Informe o ID do grafo desejado: ");
+                            idGrafo = int.Parse(Console.ReadLine());
+                            grafoDesejado = RetornaGrafoDesejado(idGrafo);
+                            ExibeVerticesDoGrafo(grafoDesejado);
+                            Console.WriteLine("Informe qual o vértice que gostaria de ver seus vértices adjacentes: ");
+                            int rotulo = int.Parse(Console.ReadLine());
+                            ExibeVerticesAdjacentes(grafoDesejado, rotulo);
+                        }
+                        catch (KeyNotFoundException)
+                        {
+                            Console.WriteLine("Id do grafo inexistente, digite somente os IDs disponíveis.");
+                        }
+                        catch (FormatException)
+                        {
+                            Console.WriteLine("Formato inválido, digite somente os IDs disponíveis.");
+                        }
                         break;
-                    //Tópicos da Ana
                     case 6:
-                        Console.Clear();
-                        ExibeIdGrafosCriados();
-                        Console.WriteLine("Informe o ID do grafo desejado: \n");
-                        idGrafo = int.Parse(Console.ReadLine());
-                        grafoDesejado = RetornaGrafoDesejado(idGrafo);
-                        Console.WriteLine("Informe o vértice desejado: \n");
-                        idVertice1 = int.Parse(Console.ReadLine());
-                        List<Aresta> arestasIncidentes = new List<Aresta>();
-                        foreach (Aresta a in grafoDesejado.RetornaTodasAsArestasDoGrafo())
+                        try
                         {
-                            if (a.RetornaVerticeOrigem().RetornaRotuloDoVertice() == idVertice1 || a.RetornaVerticeDestino().RetornaRotuloDoVertice() == idVertice1)
+                            Console.Clear();
+                            ExibeIdGrafosCriados();
+                            Console.WriteLine("Informe o ID do grafo desejado: \n");
+                            idGrafo = int.Parse(Console.ReadLine());
+                            grafoDesejado = RetornaGrafoDesejado(idGrafo);
+                            Console.WriteLine("Informe o vértice desejado: \n");
+                            idVertice1 = int.Parse(Console.ReadLine());
+                            List<Aresta> arestasIncidentes = new List<Aresta>();
+                            foreach (Aresta a in grafoDesejado.RetornaTodasAsArestasDoGrafo())
                             {
-                                arestasIncidentes.Add(a);
+                                if (a.RetornaVerticeOrigem().RetornaRotuloDoVertice() == idVertice1 || a.RetornaVerticeDestino().RetornaRotuloDoVertice() == idVertice1)
+                                {
+                                    arestasIncidentes.Add(a);
+                                }
+                            }
+                            if (arestasIncidentes.Count > 0)
+                            {
+                                Console.WriteLine($"Arestas incidentes ao vértice {idVertice1}:");
+                                foreach (Aresta a in arestasIncidentes)
+                                {
+                                    Console.WriteLine(a.RetornaID());
+                                    Console.WriteLine($"Origem: {a.RetornaVerticeOrigem()}\nDestino: {a.RetornaVerticeDestino()}\nPeso: {a.RetornarPeso()}");
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine($"Não há arestas incidentes ao vértice {idVertice1}.");
                             }
                         }
-                        if (arestasIncidentes.Count > 0)
+                        catch(KeyNotFoundException)
                         {
-                            Console.WriteLine($"Arestas incidentes ao vértice {idVertice1}:");
-                            foreach (Aresta a in arestasIncidentes)
-                            {
-                                Console.WriteLine(a.RetornaID());
-                                Console.WriteLine($"Origem: {a.RetornaVerticeOrigem()}\nDestino: {a.RetornaVerticeDestino()}\nPeso: {a.RetornarPeso()}");
-                            }
+                            Console.WriteLine("Id do grafo inexistente, digite somente os IDs disponíveis.");
                         }
-                        else
+                        catch (FormatException)
                         {
-                            Console.WriteLine($"Não há arestas incidentes ao vértice {idVertice1}.");
+                            Console.WriteLine("Formato inválido, digite somente os IDs disponíveis.");
                         }
                         break;
                     case 7:
-                        Console.Clear();
-                        ExibeIdGrafosCriados();
-                        Console.WriteLine("Informe o ID do grafo desejado: \n");
-                        idGrafo = int.Parse(Console.ReadLine());
-                        grafoDesejado = RetornaGrafoDesejado(idGrafo);
-                        Console.WriteLine("Informe o ID da aresta que deseja ver os vértices incidentes: ");
-                        idAresta = "e" + Console.ReadLine();
-                        Aresta arestaDesejada = grafoDesejado.ObterArestaPorId(idAresta);
-                        Console.WriteLine($"Vértices incidentes à aresta {idAresta}:\nOrigem: {arestaDesejada.RetornaVerticeOrigem()}\nDestino: {arestaDesejada.RetornaVerticeDestino()}");
+                        try
+                        {
+                            Console.Clear();
+                            ExibeIdGrafosCriados();
+                            Console.WriteLine("Informe o ID do grafo desejado: \n");
+                            idGrafo = int.Parse(Console.ReadLine());
+                            grafoDesejado = RetornaGrafoDesejado(idGrafo);
+                            Console.WriteLine("Informe o ID da aresta que deseja ver os vértices incidentes: ");
+                            idAresta = "e" + Console.ReadLine();
+                            Aresta arestaDesejada = grafoDesejado.ObterArestaPorId(idAresta);
+                            if (arestaDesejada != null)
+                            {
+                                Console.WriteLine($"Vértices incidentes à aresta {idAresta}:\nOrigem: {arestaDesejada.RetornaVerticeOrigem()}\nDestino{arestaDesejada.RetornaVerticeDestino()}");
+                            }
+                            else
+                            {
+                                Console.WriteLine($"Aresta {idAresta} não encontrada no grafo.");
+                            }
+                        }
+                        catch(KeyNotFoundException)
+                        {
+                            Console.WriteLine("Id do grafo inexistente, digite somente os IDs disponíveis.");
+                        }
+                        catch (FormatException)
+                        {
+                            Console.WriteLine("Formato inválido, digite somente os IDs disponíveis.");
+                        }
                         break;
                     case 8:
-                        Console.Clear();
-                        ExibeIdGrafosCriados();
-                        Console.WriteLine("Informe o ID do grafo desejado: \n");
-                        idGrafo = int.Parse(Console.ReadLine());
-                        grafoDesejado = RetornaGrafoDesejado(idGrafo);
-                        Console.WriteLine("Informe o vértice desejado: \n");
-                        idVertice1 = int.Parse(Console.ReadLine());
-                        Console.WriteLine($"O grau do vértice {idVertice1} é: {grafoDesejado.ObterVerticePorRotulo(idVertice1).RetornaListaDeArestas().Count()}");
-                        break;
-                    //Tópicos da Ana
-                    case 9:
-                        Console.Clear();
-                        ExibeIdGrafosCriados();
-                        Console.WriteLine("Informe o ID do grafo desejado: \n");
-                        idGrafo = int.Parse(Console.ReadLine());
-                        Console.WriteLine("Informe o vértice desejado: \n");
-                        idVertice1 = int.Parse(Console.ReadLine());
-                        Console.WriteLine("Informe o vértice que quer verificar a adjacência: \n");
-                        idVertice2 = int.Parse(Console.ReadLine());
-                        grafoDesejado = RetornaGrafoDesejado(idGrafo);
-                        if (grafoDesejado.VerificarAdjacenciaVertice(grafoDesejado.ObterVerticePorRotulo(idVertice1), grafoDesejado.ObterVerticePorRotulo(idVertice2)))
+                        try
                         {
-                            Console.WriteLine($"Os vértices são adjacentes!");
+                            Console.Clear();
+                            ExibeIdGrafosCriados();
+                            Console.WriteLine("Informe o ID do grafo desejado: \n");
+                            idGrafo = int.Parse(Console.ReadLine());
+                            grafoDesejado = RetornaGrafoDesejado(idGrafo);
+                            Console.WriteLine("Informe o vértice desejado: \n");
+                            idVertice1 = int.Parse(Console.ReadLine());
+                            Vertice achado = grafoDesejado.ObterVerticePorRotulo(idVertice1);
+                            if (achado != null)
+                            {
+                                Console.WriteLine($"O grau do vértice {idVertice1} é: {achado.RetornaListaDeArestas().Count()}");
+                            }
+                            else
+                            {
+                                Console.WriteLine("Vértice não encontrado no grafo.");
+                            }
+                          
                         }
-                        else
+                        catch (KeyNotFoundException)
                         {
-                            Console.WriteLine("Os vértices não são adjacentes.");
+                            Console.WriteLine("Id do grafo inexistente, digite somente os IDs disponíveis.");
+                        }
+                        catch (FormatException)
+                        {
+                            Console.WriteLine("Formato inválido, digite somente os IDs disponíveis.");
+                        }
+                        break;
+                    case 9:
+                        try
+                        {
+                            Console.Clear();
+                            ExibeIdGrafosCriados();
+                            Console.WriteLine("Informe o ID do grafo desejado: \n");
+                            idGrafo = int.Parse(Console.ReadLine());
+                            Console.WriteLine("Informe o vértice desejado: \n");
+                            idVertice1 = int.Parse(Console.ReadLine());
+                            Console.WriteLine("Informe o vértice que quer verificar a adjacência: \n");
+                            idVertice2 = int.Parse(Console.ReadLine());
+                            grafoDesejado = RetornaGrafoDesejado(idGrafo);
+                            if (VerticeExiste(grafoDesejado, idVertice1) && VerticeExiste(grafoDesejado, idVertice2))
+                            {
+                                if (grafoDesejado.VerificarAdjacenciaVertice(grafoDesejado.ObterVerticePorRotulo(idVertice1), grafoDesejado.ObterVerticePorRotulo(idVertice2)))
+                                {
+                                    Console.WriteLine($"Os vértices são adjacentes!");
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Os vértices não são adjacentes.");
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine("Um ou ambos os vértices não existem no grafo.");
+                            }
+                        }
+                        catch(KeyNotFoundException)
+                        {
+                            Console.WriteLine("Id do grafo inexistente, digite somente os IDs disponíveis.");
+                        }
+                        catch (FormatException)
+                        {
+                            Console.WriteLine("Formato inválido, digite somente os IDs disponíveis.");
                         }
                         break;
                     case 10:
-                        Console.Clear();
-                        ExibeIdGrafosCriados();
-                        Console.WriteLine("Informe o ID do grafo desejado: \n");
-                        idGrafo = int.Parse(Console.ReadLine());
-                        grafoDesejado = RetornaGrafoDesejado(idGrafo);
-                        Console.WriteLine("Informe qual aresta o id da aresta que deseja alterar o peso: \n");
-                        idAresta = "e" + int.Parse(Console.ReadLine());
-                        foreach (Aresta aresta in grafoDesejado.RetornaTodasAsArestasDoGrafo())
+                        try
                         {
-                            if (aresta.RetornaID() == idAresta)
+                            Console.Clear();
+                            ExibeIdGrafosCriados();
+                            Console.WriteLine("Informe o ID do grafo desejado: \n");
+                            idGrafo = int.Parse(Console.ReadLine());
+                            grafoDesejado = RetornaGrafoDesejado(idGrafo);
+                            Console.WriteLine("Informe qual aresta o id da aresta que deseja alterar o peso: \n");
+                            idAresta = "e" + int.Parse(Console.ReadLine());
+                            if(ArestaExiste(grafoDesejado, idAresta))
                             {
-                                Console.WriteLine($"Aresta: {aresta.RetornaID()}");
-                                Console.WriteLine($"Peso atual: {aresta.RetornarPeso()}");
-                                Console.WriteLine("Informe o novo peso da aresta: ");
-                                double novoPeso = double.Parse(Console.ReadLine());
-                                aresta.AlterarPeso(novoPeso);
-                                Console.WriteLine($"Peso atualizado com sucesso! Novo peso: {aresta.RetornarPeso()}.");
+                                foreach (Aresta aresta in grafoDesejado.RetornaTodasAsArestasDoGrafo())
+                                {
+                                    if (aresta.RetornaID() == idAresta)
+                                    {
+                                        Console.WriteLine($"Aresta: {aresta.RetornaID()}");
+                                        Console.WriteLine($"Peso atual: {aresta.RetornarPeso()}");
+                                        Console.WriteLine("Informe o novo peso da aresta: ");
+                                        double novoPeso = double.Parse(Console.ReadLine());
+                                        aresta.AlterarPeso(novoPeso);
+                                        Console.WriteLine($"Peso atualizado com sucesso! Novo peso: {aresta.RetornarPeso()}.");
+                                    }
+                                }
                             }
+                            else
+                            {
+                                Console.WriteLine($"Aresta {idAresta} não encontrada no grafo.");
+                            }
+                        }
+                        catch(KeyNotFoundException)
+                        {
+                            Console.WriteLine("Id do grafo inexistente, digite somente os IDs disponíveis.");
+                        }
+                        catch (FormatException)
+                        {
+                            Console.WriteLine("Formato inválido, digite somente os IDs disponíveis.");
                         }
                         break;
                     case 11:
-                        Console.Clear();
-                        ExibeIdGrafosCriados();
-                        Console.WriteLine("Informe o ID do grafo desejado: \n");
-                        idGrafo = int.Parse(Console.ReadLine());
-                        grafoDesejado = RetornaGrafoDesejado(idGrafo);
-                        Console.WriteLine("Informe o vértice desejado: \n");
-                        idVertice1 = int.Parse(Console.ReadLine());
-                        Console.WriteLine("Informe o id do vértice deseja trocar de lugar: \n");
-                        idVertice2 = int.Parse(Console.ReadLine());
-                        Grafo copiaGrafoDesejado = grafoDesejado;
-                        grafoDesejado.TrocarVertices(idVertice1, idVertice2);
-                        Console.WriteLine($"Vértices {idVertice1} e {idVertice2} trocados com sucesso!");
+                        try
+                        {
+                            Console.Clear();
+                            ExibeIdGrafosCriados();
+                            Console.WriteLine("Informe o ID do grafo desejado: \n");
+                            idGrafo = int.Parse(Console.ReadLine());
+                            grafoDesejado = RetornaGrafoDesejado(idGrafo);
+                            Console.WriteLine("Informe o vértice desejado: \n");
+                            idVertice1 = int.Parse(Console.ReadLine());
+                            Console.WriteLine("Informe o id do vértice deseja trocar de lugar: \n");
+                            idVertice2 = int.Parse(Console.ReadLine());
+                            Grafo copiaGrafoDesejado = grafoDesejado;
+                            if(VerticeExiste(grafoDesejado, idVertice1) && VerticeExiste(grafoDesejado, idVertice2))
+                            {
+                                grafoDesejado.TrocarVertices(idVertice1, idVertice2);
+                                Console.WriteLine($"Vértices {idVertice1} e {idVertice2} trocados com sucesso!");
+                            }
+                            else
+                            {
+                                Console.WriteLine("Um ou ambos os vértices não existem no grafo.");
+                            }
+                        }
+                        catch (KeyNotFoundException)
+                        {
+                            Console.WriteLine("Id do grafo inexistente, digite somente os IDs disponíveis.");
+                        }
+                        catch (FormatException)
+                        {
+                            Console.WriteLine("Formato inválido, digite somente os IDs disponíveis.");
+                        }
                         break;
                     case 12:
-                        Console.Clear();
-                        ExibeIdGrafosCriados();
-                        Console.WriteLine("Informe o ID do grafo desejado: \n");
-                        idGrafo = int.Parse(Console.ReadLine());
-                        grafoDesejado = RetornaGrafoDesejado(idGrafo);
-                        Console.WriteLine("Informe o vértice de origem para a busca: \n");
-                        idVertice1 = int.Parse(Console.ReadLine());
-                        algoritmoBusca = new Buscas(grafoDesejado);
-                        buscaFinalizada = algoritmoBusca.BuscaProfundidade(idVertice1);
-                        Console.WriteLine("Aqui está a tabela de busca em profundidade:\n");
-                        ExibirMatrizBusca(buscaFinalizada);
+                        try
+                        {
+                            Console.Clear();
+                            ExibeIdGrafosCriados();
+                            Console.WriteLine("Informe o ID do grafo desejado: \n");
+                            idGrafo = int.Parse(Console.ReadLine());
+                            grafoDesejado = RetornaGrafoDesejado(idGrafo);
+                            Console.WriteLine("Informe o vértice de origem para a busca: \n");
+                            idVertice1 = int.Parse(Console.ReadLine());
+                            if (VerticeExiste(grafoDesejado, idVertice1))
+                            {
+                                algoritmoBusca = new Buscas(grafoDesejado);
+                                buscaFinalizada = algoritmoBusca.BuscaProfundidade(idVertice1);
+                                Console.WriteLine("Aqui está a tabela de busca em profundidade:\n");
+                                ExibirMatrizBusca(buscaFinalizada);
+                            }
+                            else
+                            {
+                                Console.WriteLine($"Vértice {idVertice1} não encontrado no grafo.");
+                            }
+                        }
+                        catch(KeyNotFoundException)
+                        {
+                            Console.WriteLine("Id do grafo inexistente, digite somente os IDs disponíveis.");
+                        }
+                        catch (FormatException)
+                        {
+                            Console.WriteLine("Formato inválido, digite somente os IDs disponíveis.");
+                        }
                         break;
                     case 13:
-                        Console.Clear();
-                        ExibeIdGrafosCriados();
-                        Console.WriteLine("Informe o ID do grafo desejado: \n");
-                        idGrafo = int.Parse(Console.ReadLine());
-                        grafoDesejado = RetornaGrafoDesejado(idGrafo);
-                        Console.WriteLine("Informe o vértice de origem para a busca: \n");
-                        idVertice1 = int.Parse(Console.ReadLine());
-                        algoritmoBusca = new Buscas(grafoDesejado);
-                        buscaFinalizada = algoritmoBusca.IniciarBuscaLargura(idVertice1);
-                        Console.WriteLine("Aqui está a tabela de busca em largura:\n");
-                        ExibirMatrizBusca(buscaFinalizada);
+                        try
+                        {
+                            Console.Clear();
+                            ExibeIdGrafosCriados();
+                            Console.WriteLine("Informe o ID do grafo desejado: \n");
+                            idGrafo = int.Parse(Console.ReadLine());
+                            grafoDesejado = RetornaGrafoDesejado(idGrafo);
+                            Console.WriteLine("Informe o vértice de origem para a busca: \n");
+                            idVertice1 = int.Parse(Console.ReadLine());
+                            if(VerticeExiste(grafoDesejado, idVertice1))
+                            {
+                                algoritmoBusca = new Buscas(grafoDesejado);
+                                buscaFinalizada = algoritmoBusca.IniciarBuscaLargura(idVertice1);
+                                Console.WriteLine("Aqui está a tabela de busca em largura:\n");
+                                ExibirMatrizBusca(buscaFinalizada);
+                            }
+                            else
+                            {
+                                Console.WriteLine($"Vértice {idVertice1} não encontrado no grafo.");
+                            }
+                        }
+                        catch(KeyNotFoundException)
+                        {
+                            Console.WriteLine("Id do grafo inexistente, digite somente os IDs disponíveis.");
+                        }
+                        catch (FormatException)
+                        {
+                            Console.WriteLine("Formato inválido, digite somente os IDs disponíveis.");
+                        }
                         break;
                     case 14:
-                        Console.Clear();
-                        ExibeIdGrafosCriados();
-                        Console.WriteLine("Informe o ID do grafo desejado: \n");
-                        idGrafo = int.Parse(Console.ReadLine());
-                        grafoDesejado = RetornaGrafoDesejado(idGrafo);
-                        CaminhoMinimo caminhoPorFloydWarshall = new CaminhoMinimo(grafoDesejado);
-                        double[,] tabelaFloydWarshall = caminhoPorFloydWarshall.RetornaTabelaFloydWarshall();
-                        ExibeTabelaDistanciasFloydWarshall(tabelaFloydWarshall);    
+                        try
+                        {
+                            Console.Clear();
+                            ExibeIdGrafosCriados();
+                            Console.WriteLine("Informe o ID do grafo desejado: \n");
+                            idGrafo = int.Parse(Console.ReadLine());
+                            grafoDesejado = RetornaGrafoDesejado(idGrafo);
+                            CaminhoMinimo caminhoPorFloydWarshall = new CaminhoMinimo(grafoDesejado);
+                            double[,] tabelaFloydWarshall = caminhoPorFloydWarshall.RetornaTabelaFloydWarshall();
+                            ExibeTabelaDistanciasFloydWarshall(tabelaFloydWarshall);
+                        }
+                        catch (KeyNotFoundException)
+                        {
+                            Console.WriteLine("Id do grafo inexistente, digite somente os IDs disponíveis.");
+                        }
+                        catch(FormatException)
+                        {
+                            Console.WriteLine("Formato inválido, digite somente os IDs disponíveis.");
+                        }
                         break;
                     case 15:
-                        Console.Clear();
-                        ExibeIdGrafosCriados();
-                        Console.WriteLine("Informe o ID do grafo desejado: \n");
-                        idGrafo = int.Parse(Console.ReadLine());
-                        grafoDesejado = RetornaGrafoDesejado(idGrafo);
-                        Console.WriteLine("Informe o vértice de origem: \n");
-                        idVertice1 = int.Parse(Console.ReadLine());
-                        Console.WriteLine("Informe o vértice de destino: \n");
-                        idVertice2 = int.Parse(Console.ReadLine());
-
-                        grafoDesejado.DijkstraCaminhoMinimo(idVertice1, idVertice2);
+                        try
+                        {
+                            Console.Clear();
+                            ExibeIdGrafosCriados();
+                            Console.WriteLine("Informe o ID do grafo desejado: \n");
+                            idGrafo = int.Parse(Console.ReadLine());
+                            grafoDesejado = RetornaGrafoDesejado(idGrafo);
+                            Console.WriteLine("Informe o vértice de origem: \n");
+                            idVertice1 = int.Parse(Console.ReadLine());
+                            Console.WriteLine("Informe o vértice de destino: \n");
+                            idVertice2 = int.Parse(Console.ReadLine());
+                            if(VerticeExiste(grafoDesejado, idVertice1) && VerticeExiste(grafoDesejado, idVertice2))
+                            {
+                                grafoDesejado.DijkstraCaminhoMinimo(idVertice1, idVertice2);
+                            }
+                            else
+                            {
+                                Console.WriteLine("Um ou ambos os vértices não existem no grafo.");
+                            }
+                            
+                        }
+                        catch(KeyNotFoundException)
+                        {
+                            Console.WriteLine("Id do grafo inexistente, digite somente os IDs disponíveis.");
+                        }
+                        catch (FormatException)
+                        {
+                            Console.WriteLine("Formato inválido, digite somente os IDs disponíveis.");
+                        }
+                        break;
+                    case 0:
+                        Console.WriteLine("Finalizando o programa...");
                         break;
                 }
                 Pausa();

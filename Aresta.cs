@@ -15,7 +15,6 @@ namespace Trabalho_Grafos
         private double pesoDaAresta;
         private Vertice origem;
         private Vertice destino;
-        // 1=aresta árvore; 2=aresta retorno; 3=aresta avanço; 4=aresta cruzamento
         private int TipoAresta;
 
         public Aresta(Vertice origem, Vertice destino, double valorPeso) 
@@ -69,5 +68,6 @@ namespace Trabalho_Grafos
         {
             return this.TipoAresta;
         }
+        
     }
 }
